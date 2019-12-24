@@ -1,36 +1,49 @@
 ﻿@page
 @model IndexModel
-@{
-    ViewData["Title"] = "Home page";
-}
 
 <div class="container">
     <div class="row">&nbsp;</div>
     <div class="row">
-        <div class="col-2">User</div>
-        <div class="col-4"><input type="text" id="userInput" /></div>
-    </div>
-    <div class="row">
-        <div class="col-2">Message</div>
-        <div class="col-4"><input type="text" id="messageInput" /></div>
-    </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-6">
-            <input type="button" id="sendButton" value="Send" />
+        <div class="col-12">
+            <form id="connection-form">
+                <div class="form-group">
+                    <label>Enter your username:</label>
+                    <input class="form-control" id="userInput" type="text" placeholder="johndoe123" />
+                </div>
+                <input type="submit" id="connection-form-btn" class="btn btn-dark btn-block" value="Connect" />
+            </form>
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-12">
         <hr />
     </div>
 </div>
-<div class="row">
-    <div class="col-6">
-        <ul id="messagesList"></ul>
+
+<div class="container">
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-12">
+            <form id="message-form">
+                <div class="form-group">
+                    <input class="form-control" id="messageInput" type="text"  />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="list-group-flush" id="messagesList"></div>
+        </div>
+    </div>
+</div>
+
 
 <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
 <script src="~/js/chat.js"></script>

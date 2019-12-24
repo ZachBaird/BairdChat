@@ -4,11 +4,15 @@
 // On page load actions.
 // ------------------------------------
 
-// Initialize hub connection with mapped URL from Startup.cs.
+// Build hub connection with mapped URL from Startup.cs.
 const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 // Disable send button until connection is established.
-document.getElementById("sendButton").disabled = true;
+document.getElementById("messageInput").disabled = true;
+// Initialize the connection form.
+const connectionForm = document.getElementById("connection-form");
+const messageForm = document.getElementById("message-form");
 // ------------------------------------------------------------------------------------------------
+
 
 
 
@@ -20,20 +24,39 @@ document.getElementById("sendButton").disabled = true;
 connection.on("ReceiveMessage", (user, message) => {
     const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const encodedMsg = user + ": " + msg;
-    const li = document.createElement("li");
-    li.textContent = encodedMsg;
-    document.getElementById("messagesList").appendChild(li);
+    const p = document.createElement("p");
+    const div = document.createElement("div");
+    const lastChatItem = document.getElementById("messagesList").firstChild;
+    div.className = "list-group-item list-group-item-action";
+    p.textContent = encodedMsg;
+    p.classList.add("list-group-item");
+    div.appendChild(p);
+    document.getElementById("messagesList").insertBefore(div, lastChatItem);
 });
 //-------------------------------------------------------------------------------------------------
 
 
 
-// Start the connection.
-connection.start().then(() => {
-    document.getElementById("sendButton").disabled = false;
-}).catch(err => {
-    return console.error(err.toString());
-});
+
+connectionForm.addEventListener("submit", e => {
+    e.preventDefault();
+    if (document.getElementById("userInput").value) {
+        // Disable the username form
+        document.getElementById("userInput").disabled = true;
+        document.getElementById("connection-form-btn").disabled = true;
+        connectionForm.style.display = "none";
+
+        // Start the connection.
+        connection.start().then(() => {
+            document.getElementById("messageInput").disabled = false;
+        }).catch(err => {
+            return console.error(err.toString());
+        });
+    } else {
+        alert("You need to input a username.");
+    }
+})
+
 
 
 
@@ -42,7 +65,7 @@ connection.start().then(() => {
 //-------------------------------------
 
 // Send a message to the server.
-document.getElementById("sendButton").addEventListener("click", e => {
+messageForm.addEventListener("submit", e => {
     const user = document.getElementById("userInput").value;
     const message = document.getElementById("messageInput").value;
 
@@ -50,6 +73,8 @@ document.getElementById("sendButton").addEventListener("click", e => {
     connection.invoke("SendMessage", user, message).catch(err => {
         return console.error(err.toString());
     })
+
+    document.getElementById("messageInput").value = "";
     e.preventDefault();
 });
 //-------------------------------------------------------------------------------------------------

@@ -62,6 +62,14 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
+#messagesList {
+    display: inline;
+    width: 100% !important;
+    max-width: 700px !important;
+    word-wrap: break-word
+}
+
 .footer {
   position: absolute;
   bottom: 0;
